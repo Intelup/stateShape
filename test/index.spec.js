@@ -1,32 +1,40 @@
 /* global describe, it, before */
 
-// import chai from 'chai';
-// import {Cat, Dog} from '../lib/webpack-library-starter.js';
+import chai from 'chai'
+import stateshape from '../lib/stateshape'
 
-// chai.expect();
+chai.expect()
 
-// const expect = chai.expect;
+const expect = chai.expect
 
-// let lib;
+let original
+let modified
 
-// describe('Given an instance of my Cat library', () => {
-//   before(() => {
-//     lib = new Cat();
-//   });
-//   describe('when I need the name', () => {
-//     it('should return the name', () => {
-//       expect(lib.name).to.be.equal('Cat');
-//     });
-//   });
-// });
+describe('Cloning an object', () => {
+  before(() => {
+    original = {
+      name: 'John',
+      age: '32'
+    }
+  })
+  describe('when I clone', () => {
+    it('should return the same parameters', () => {
+      modified = stateshape.object.deepClone(original)
+      expect(original.name).to.be.equal(modified.name)
+      expect(original.age).to.be.equal(modified.age)
+    })
+  })
+})
 
-// describe('Given an instance of my Dog library', () => {
-//   before(() => {
-//     lib = new Dog();
-//   });
-//   describe('when I need the name', () => {
-//     it('should return the name', () => {
-//       expect(lib.name).to.be.equal('Dog');
-//     });
-//   });
-// });
+describe('Flattening an array', () => {
+  before(() => {
+    original = [[1, 2, 3], [4, 5]]
+  })
+  describe('when I flatten', () => {
+    it('should return flat array', () => {
+      modified = stateshape.array.flattenizeArray(original)
+      expect(original).to.not.be.equal(modified)
+      expect(modified).to.be.an('array').that.includes(4)
+    })
+  })
+})
