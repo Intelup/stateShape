@@ -22,32 +22,36 @@ const array = {
 
     let result = {}
 
-    result[name] = {
-      byUuid: Object.values(array).reduce((obj, row) => {
-        // allIds.push(row[propertyName])
+    let firstKey = 'by' + propertyName.replace(/^\w/, c => c.toUpperCase())
 
-        row = Object.entries(row)
-          .map(val => {
-            // console.log('VAL: ', val)
+    let secondKey = 'all' + propertyName.replace(/^\w/, c => c.toUpperCase())
 
-            if (Array.isArray(val[1]) && val[1].every(item => typeof item === 'object')) {
-              val[1] = val[1].map(item => item[propertyName])
-            }
+    result[name] = {}
 
-            // console.log('RETURNED VAL: ', val)
-            return val
-          })
-          .reduce(function (prev, curr) {
-            prev[curr[0]] = curr[1]
-            return prev
-          }, {})
+    result[name][firstKey] = Object.values(array).reduce((obj, row) => {
+      // allIds.push(row[propertyName])
 
-        // console.log('ROW: ', row)
-        return ((obj[row[propertyName]] = row), obj)
-      }, {}),
+      row = Object.entries(row)
+        .map(val => {
+          // console.log('VAL: ', val)
 
-      allIds: allIds
-    }
+          if (Array.isArray(val[1]) && val[1].every(item => typeof item === 'object')) {
+            val[1] = val[1].map(item => item[propertyName])
+          }
+
+          // console.log('RETURNED VAL: ', val)
+          return val
+        })
+        .reduce(function (prev, curr) {
+          prev[curr[0]] = curr[1]
+          return prev
+        }, {})
+
+      // console.log('ROW: ', row)
+      return ((obj[row[propertyName]] = row), obj)
+    }, {})
+
+    result[name][secondKey] = allIds
 
     anotherParameters = [...new Set(anotherParameters)]
     console.log('Another Parameters: ', anotherParameters)

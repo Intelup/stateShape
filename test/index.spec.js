@@ -8,20 +8,51 @@ chai.expect()
 const expect = chai.expect
 
 let original
-let modified
+let modified1
+let modified2
 
 describe('Cloning an object', () => {
   before(() => {
-    original = {
-      name: 'John',
-      age: '32'
-    }
+    original = [
+      {
+        city: 'Piracicaba',
+        country: 'Brazil'
+      },
+      {
+        persons: [
+          {
+            name: 'John',
+            age: '32',
+            pets: ['cat', 'dog']
+          },
+          {
+            name: 'Mary',
+            age: '28',
+            pets: ['parrot']
+          }
+        ]
+      }
+    ]
+  })
+  describe('when I merge an array of objects', () => {
+    it('should return one object', () => {
+      modified1 = stateshape.object.objectsArrayMerge(original)
+      expect(modified1).to.be.an('object')
+    })
   })
   describe('when I clone', () => {
-    it('should return the same parameters', () => {
-      modified = stateshape.object.deepClone(original)
-      expect(original.name).to.be.equal(modified.name)
-      expect(original.age).to.be.equal(modified.age)
+    it('should return an object with the same parameters', () => {
+      modified2 = stateshape.object.deepClone(modified1)
+      expect(modified2.city).to.be.equal(modified1.city)
+      expect(modified2.country).to.be.equal(modified1.country)
+    })
+  })
+  describe('when I pass an array of objects', () => {
+    it('should return an object', () => {
+      modified2 = stateshape.array.arrayToObject('persons', modified1.persons, 'name')
+      console.log(modified2)
+      // expect(modified2.city).to.be.equal(modified1.city)
+      // expect(modified2.country).to.be.equal(modified1.country)
     })
   })
 })
@@ -32,9 +63,11 @@ describe('Flattening an array', () => {
   })
   describe('when I flatten', () => {
     it('should return flat array', () => {
-      modified = stateshape.array.flattenizeArray(original)
-      expect(original).to.not.be.equal(modified)
-      expect(modified).to.be.an('array').that.includes(4)
+      modified1 = stateshape.array.flattenizeArray(original)
+      expect(original).to.not.be.equal(modified1)
+      expect(modified1)
+        .to.be.an('array')
+        .that.includes(4)
     })
   })
 })
