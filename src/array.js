@@ -86,7 +86,7 @@ const array = {
         anotherParameters.map(parameter => {
           let objectsArray = this.flattenizeArray(array.map(item => item[parameter]))
 
-          let objects = this.transformArrayToObjs(parameter, objectsArray, propertyName)
+          let objects = this.objectsArrayShape(parameter, objectsArray, propertyName)
 
           return objects
         })
