@@ -90,4 +90,4 @@ const stateShape = {
   }
 }
 
-export default stateShape
+module.exports = stateShape
