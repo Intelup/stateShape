@@ -11,7 +11,7 @@ let original
 let modified1
 let modified2
 
-describe('Cloning an object', () => {
+describe('Do some magic with array of objects', () => {
   before(() => {
     original = [
       {
@@ -36,7 +36,7 @@ describe('Cloning an object', () => {
   })
   describe('when I merge an array of objects', () => {
     it('should return one object', () => {
-      modified1 = stateshape.object.objectsArrayMerge(original)
+      modified1 = stateshape.array.objectsArrayMerge(original)
       expect(modified1).to.be.an('object')
     })
   })
@@ -47,17 +47,26 @@ describe('Cloning an object', () => {
       expect(modified2.country).to.be.equal(modified1.country)
     })
   })
-  describe('when I pass an array of objects', () => {
+  describe('when I pass an array of objects to shape', () => {
     it('should return an object', () => {
-      modified2 = stateshape.array.arrayToObject('persons', modified1.persons, 'name')
-      console.log(modified2)
-      // expect(modified2.city).to.be.equal(modified1.city)
-      // expect(modified2.country).to.be.equal(modified1.country)
+      modified2 = stateshape.array.objectsArrayShape('persons', modified1.persons, 'name')
+      expect(modified2).to.be.an('object')
+      expect(modified2.persons.byName.John.name).to.be.equal(
+        modified1.persons.map(person => person.name).find(name => name === 'John')
+      )
+    })
+  })
+  describe('when I pass an key to delete', () => {
+    it('should return an object without that key', () => {
+      modified1 = stateshape.object.removeByKey(modified2.persons.byName, 'John', 'name')
+      expect(modified1).to.be.an('object')
+      expect(modified1).to.not.have.any.keys('John')
+      expect(modified1).to.have.any.keys('Mary')
     })
   })
 })
 
-describe('Flattening an array', () => {
+describe('Do some magic with pure arrays', () => {
   before(() => {
     original = [[1, 2, 3], [4, 5]]
   })

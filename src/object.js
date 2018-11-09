@@ -1,5 +1,3 @@
-import { flattenizeArray, transformArrayToObjs } from './array'
-
 const object = {
   /**
    * Clone object without reference
@@ -15,27 +13,22 @@ const object = {
     return Array.isArray(obj) ? (clone.length = obj.length) && Array.from(clone) : clone
   },
   /**
-   * Convert array of object to single object
+   * Remove object by key
    *
    * @private
-   * @param {Array} [arr] The array.
-   * @returns {Object} Returns the object.
+   * @param {Object} [objs] The original object.
+   * @param {String} [value] The key value to remove.
+   * @param {String} [keyName] The key name to filter (default: uuid).
+   * @returns {Object} Returns the new object, by removing the object from the key passed by value parameter.
    */
-  objectsArrayMerge(arr) {
-    return flattenizeArray(arr.map(item => Object.entries(item))).reduce(function (prev, curr) {
-      prev[curr[0]] = curr[1]
-      return prev
-    }, {})
-  },
-  /**
-   * Remove object by key (uuid)
-   *
-   * @private
-   * @param {Object} [objs] The object with keys of uuid.
-   * @param {String} [uuid] The string index (uuid).
-   * @returns {Object} Returns the new object, by removing the object from the key passed by uuid parameter.
-   */
-  removeByUuid: (objs, uuid) => transformArrayToObjs(Object.values(objs).filter(obj => obj.uuid !== uuid))
+  removeByKey: (objs, value, keyName = 'uuid') =>
+    Object.values(Object.values(objs).filter(obj => obj[keyName] !== value)).reduce(
+      (obj, row) => {
+        obj[row[keyName]] = row
+        return obj
+      },
+      {}
+    )
 }
 
 export default object
